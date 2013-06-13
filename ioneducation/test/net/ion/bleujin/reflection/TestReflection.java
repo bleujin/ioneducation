@@ -5,6 +5,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
+import org.apache.commons.beanutils.ConstructorUtils;
+import org.apache.commons.beanutils.MethodUtils;
+
 import junit.framework.TestCase;
 
 public class TestReflection extends TestCase {
@@ -59,4 +62,14 @@ public class TestReflection extends TestCase {
 		assertEquals("hero", instance.name()) ;
 	}
 	
+	
+	public void testUseFramework() throws Exception {
+		final Class<Employee> clz = Employee.class;
+		Constructor<Employee> cons = clz.getDeclaredConstructor(String.class, int.class);
+		cons.setAccessible(true) ;
+		Employee instance = cons.newInstance("bleujin", 20) ;
+		
+		Object result = MethodUtils.invokeMethod(instance, "name", new Object[0]) ;
+		assertEquals("bleujin", result) ;
+	}
 }
