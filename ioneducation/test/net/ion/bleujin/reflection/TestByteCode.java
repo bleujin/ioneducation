@@ -5,10 +5,7 @@ import java.lang.reflect.Constructor;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
-import javassist.NotFoundException;
-import javassist.util.HotSwapper;
 import junit.framework.TestCase;
-import net.ion.framework.util.Debug;
 
 public class TestByteCode extends TestCase {
 
