@@ -13,13 +13,15 @@ public class TestProxy extends TestCase {
 
 	public void testCreateProxy() throws Exception {
 		Employee instance = Employee.create("bleujin", 20) ;
-
+//		instance.sayHello() ;
+		
+		
 		
 		People people = (People)Proxy.newProxyInstance(this.getClass().getClassLoader(), instance.getClass().getInterfaces(), new ProxyPeople(instance));
 		
-		people.name() ;
-		people.age() ;
-		
+//		people.name() ;
+//		people.age() ;
+//		
 		people.sayHello() ;
 	}
 	

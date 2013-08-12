@@ -1,39 +1,39 @@
-package net.ion.bleujin.multithread.readswrite.modify ;
+package net.ion.bleujin.multithread.readswrite.modify;
 
 public final class ReadWriteLock {
-    private int readingReaders = 0; // (A) ÀÛ‚É“Ç‚ñ‚Å‚¢‚éÅ’†‚ÌƒXƒŒƒbƒh‚Ì”
-    private int waitingWriters = 0; // (B) ‘‚­‚Ì‚ğ‘Ò‚Á‚Ä‚¢‚éƒXƒŒƒbƒh‚Ì”
-    private int writingWriters = 0; // (C) ÀÛ‚É‘‚¢‚Ä‚¢‚éÅ’†‚ÌƒXƒŒƒbƒh‚Ì”
-    private boolean preferWriter = true; // ‘‚­‚Ì‚ğ—Dæ‚·‚é‚È‚çtrue
+	private int readingReaders = 0; // (A) ï¿½ï¿½ï¿½Û‚É“Ç‚ï¿½Å‚ï¿½ï¿½ï¿½Å’ï¿½ï¿½ÌƒXï¿½ï¿½ï¿½bï¿½hï¿½Ìï¿½
+	private int waitingWriters = 0; // (B) ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½Ò‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½Ìï¿½
+	private int writingWriters = 0; // (C) ï¿½ï¿½ï¿½Û‚Éï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Å’ï¿½ï¿½ÌƒXï¿½ï¿½ï¿½bï¿½hï¿½Ìï¿½
+	private boolean preferWriter = true; // ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½Dï¿½æ‚·ï¿½ï¿½È‚ï¿½true
 
-    public synchronized void readLock() throws InterruptedException {
-        while (writingWriters > 0 || (preferWriter && waitingWriters > 0)) {
-            wait();
-        }
-        readingReaders++;                       // (A) ÀÛ‚É“Ç‚ñ‚Å‚¢‚éƒXƒŒƒbƒh‚Ì”‚ğ1‘‚â‚·
-    }
+	public synchronized void readLock() throws InterruptedException {
+		while (writingWriters > 0 || (preferWriter && waitingWriters > 0)) {
+			this.wait();
+		}
+		readingReaders++; // (A) ï¿½ï¿½ï¿½Û‚É“Ç‚ï¿½Å‚ï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½Ìï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½â‚·
+	}
 
-    public synchronized void readUnlock() {
-        readingReaders--;                       // (A) ÀÛ‚É“Ç‚ñ‚Å‚¢‚éƒXƒŒƒbƒh‚Ì”‚ğ1Œ¸‚ç‚·
-        preferWriter = true;
-        notifyAll();
-    }
+	public synchronized void readUnlock() {
+		readingReaders--; // (A) ï¿½ï¿½ï¿½Û‚É“Ç‚ï¿½Å‚ï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½Ìï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½ç‚·
+		preferWriter = true;
+		notifyAll();
+	}
 
-    public synchronized void writeLock() throws InterruptedException {
-        waitingWriters++;                       // (B) ‘‚­‚Ì‚ğ‘Ò‚Á‚Ä‚¢‚éƒXƒŒƒbƒh‚Ì”‚ğ1‘‚â‚·
-        try {
-            while (readingReaders > 0 || writingWriters > 0) {
-                wait();
-            }
-        } finally {
-            waitingWriters--;                   // (B) ‘‚­‚Ì‚ğ‘Ò‚Á‚Ä‚¢‚éƒXƒŒƒbƒh‚Ì”‚ğ1Œ¸‚ç‚·
-        }
-        writingWriters++;                       // (C) ÀÛ‚É‘‚¢‚Ä‚¢‚éƒXƒŒƒbƒh‚Ì”‚ğ1‘‚â‚·
-    }
+	public synchronized void writeLock() throws InterruptedException {
+		waitingWriters++; // (B) ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½Ò‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½Ìï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½â‚·
+		try {
+			while (readingReaders > 0 || writingWriters > 0) {
+				wait();
+			}
+		} finally {
+			waitingWriters--; // (B) ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½Ò‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½Ìï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½ç‚·
+		}
+		writingWriters++; // (C) ï¿½ï¿½ï¿½Û‚Éï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½Ìï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½â‚·
+	}
 
-    public synchronized void writeUnlock() {
-        writingWriters--;                       // (C) ÀÛ‚É‘‚¢‚Ä‚¢‚éƒXƒŒƒbƒh‚Ì”‚ğ1Œ¸‚ç‚·
-        preferWriter = false;
-        notifyAll();
-    }
+	public synchronized void writeUnlock() {
+		writingWriters--; // (C) ï¿½ï¿½ï¿½Û‚Éï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½Ìï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½ç‚·
+		preferWriter = false;
+		this.notifyAll();
+	}
 }

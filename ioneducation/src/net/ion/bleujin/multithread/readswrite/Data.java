@@ -9,11 +9,14 @@ public class Data {
         }
     }
     public synchronized char[] read() throws InterruptedException {
+    	
         return doRead();
     }
+    
     public synchronized void write(char c) throws InterruptedException {
         doWrite(c);
     }
+    
     private char[] doRead() {
         char[] newbuf = new char[buffer.length];
         for (int i = 0; i < buffer.length; i++) {

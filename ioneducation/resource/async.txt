@@ -1,0 +1,43 @@
+비동기 프로그래밍
+
+선지식
+	- Method Call과 Message Send
+	- Thread란 ?
+	- CallStack
+	- 객체는 크게 Controller와 requestBean으로 이루어진다. 
+	
+	
+대상 
+	- context가 다르다. (변경 속도가 다르다. )
+	- 과정/절차가 있다.(주로 Resource or Remote 관련) 
+	- 생성되는 예외가 비슷한 그룹이 있다. (IOException, SQLException, RemoteException)
+
+
+예제 
+	IO
+		- Message Call
+		- Generic
+		- Exception Handling
+		- 비동기 처리
+
+	
+비동기 프로그래밍을 하는 이유
+	- 나는 저 프레임웍을 잘 모른다. (내가 지금 알고 있는 것이 전체가 아니며  틀릴수도 있다.)
+	- 나는 저것에 신경쓰고 싶지 않다. (내가 좀더 잘 알게되었을때 멘붕하고 싶지 않다. )
+	  -> 일종의 Adapter
+	- 분할 정복(왕따 만들기)
+	- Heap 이외의 것을 신용하지 말자.(비행기)
+	
+장점 
+	- 관심 영역의 분리
+	- 중복을 줄여준다. 
+	- 외부의 충격을 중화시켜 준다. 
+
+
+예제 
+	HTTP Client
+	AradonClient
+	
+	
+질문 
+	Math.sqrt

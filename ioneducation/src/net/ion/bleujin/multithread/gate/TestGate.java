@@ -1,5 +1,7 @@
 package net.ion.bleujin.multithread.gate;
 
+import com.sun.swing.internal.plaf.synth.resources.synth;
+
 import net.ion.framework.util.InfinityThread;
 import junit.framework.TestCase;
 
@@ -39,21 +41,28 @@ class UserThread extends Thread {
 
 class Gate {
     private int counter = 0;
+
     private String name = "Nobody";
     private String address = "Nowhere";
-    public void pass(String name, String address) {
-        this.counter++;
-        this.name = name;
-        try {
-            Thread.sleep(10);
-        } catch (InterruptedException e) {
-        }
-        this.address = address;
-        check();
+    
+    private Object mutex = new Object() ;
+    public void pass(String _name, String _address) {
+    	synchronized (this) {
+    		this.counter++;
+    		this.name = _name;
+    		this.address = _address;
+		}
+    	check();
     }
-    public String toString() {
-        return "No." + counter + ": " + name + ", " + address;
+    
+    
+    public void ddd(){
+    	
     }
+    
+//    public String toString() {
+//        return "No." + counter + ": " + name + ", " + address;
+//    }
     private void check() {
         if (name.charAt(0) != address.charAt(0)) {
             System.out.println("***** BROKEN ***** " + toString());
