@@ -1,38 +1,38 @@
 package net.ion.bleujin.multithread.readswrite.modify;
 
 public final class ReadWriteLock {
-	private int readingReaders = 0; // (A) ���ۂɓǂ�ł���Œ��̃X���b�h�̐�
-	private int waitingWriters = 0; // (B) �����̂�҂��Ă���X���b�h�̐�
-	private int writingWriters = 0; // (C) ���ۂɏ����Ă���Œ��̃X���b�h�̐�
-	private boolean preferWriter = true; // �����̂�D�悷��Ȃ�true
+	private int readingReaders = 0; // (A)
+	private int waitingWriters = 0; // (B)
+	private int writingWriters = 0; // (C)
+	private boolean preferWriter = true; 
 
 	public synchronized void readLock() throws InterruptedException {
 		while (writingWriters > 0 || (preferWriter && waitingWriters > 0)) {
 			this.wait();
 		}
-		readingReaders++; // (A) ���ۂɓǂ�ł���X���b�h�̐���1���₷
+		readingReaders++; // (A)
 	}
 
 	public synchronized void readUnlock() {
-		readingReaders--; // (A) ���ۂɓǂ�ł���X���b�h�̐���1���炷
+		readingReaders--; // (A)
 		preferWriter = true;
 		notifyAll();
 	}
 
 	public synchronized void writeLock() throws InterruptedException {
-		waitingWriters++; // (B) �����̂�҂��Ă���X���b�h�̐���1���₷
+		waitingWriters++; // (B)
 		try {
 			while (readingReaders > 0 || writingWriters > 0) {
 				wait();
 			}
 		} finally {
-			waitingWriters--; // (B) �����̂�҂��Ă���X���b�h�̐���1���炷
+			waitingWriters--; // (B)
 		}
-		writingWriters++; // (C) ���ۂɏ����Ă���X���b�h�̐���1���₷
+		writingWriters++; // (C)
 	}
 
 	public synchronized void writeUnlock() {
-		writingWriters--; // (C) ���ۂɏ����Ă���X���b�h�̐���1���炷
+		writingWriters--; // (C)
 		preferWriter = false;
 		this.notifyAll();
 	}
