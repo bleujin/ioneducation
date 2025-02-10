@@ -1,7 +1,5 @@
 package net.ion.bleujin.multithread.gate;
 
-import com.sun.swing.internal.plaf.synth.resources.synth;
-
 import net.ion.framework.util.InfinityThread;
 import junit.framework.TestCase;
 

@@ -5,10 +5,10 @@ import java.lang.reflect.Method;
 
 import net.ion.framework.util.Debug;
 
-public class ProxyPeople implements InvocationHandler {
+public class ProxyObj implements InvocationHandler {
 
 	private Object target;
-	public ProxyPeople(Object target) {
+	public ProxyObj(Object target) {
 		this.target = target;
 	}
 	

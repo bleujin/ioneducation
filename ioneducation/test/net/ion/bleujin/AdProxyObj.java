@@ -3,7 +3,7 @@ package net.ion.bleujin;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
-public class AdProxyPeople<T> implements InvocationHandler {
+public class AdProxyObj<T> implements InvocationHandler {
 
 	public interface AOPHandler<T> {
 		public T pre(Object proxy, Method m, Object[] args) ;
@@ -17,7 +17,7 @@ public class AdProxyPeople<T> implements InvocationHandler {
 	private Object target;
 	private AOPHandler<T> handler ;
 	
-	public AdProxyPeople(Object target, AOPHandler<T> handler) {
+	public AdProxyObj(Object target, AOPHandler<T> handler) {
 		this.target = target;
 		this.handler = handler ;
 	}

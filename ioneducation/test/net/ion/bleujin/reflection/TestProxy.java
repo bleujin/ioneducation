@@ -5,9 +5,9 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 import junit.framework.TestCase;
-import net.ion.bleujin.AdProxyPeople;
-import net.ion.bleujin.ProxyPeople;
-import net.ion.bleujin.AdProxyPeople.Type;
+import net.ion.bleujin.AdProxyObj;
+import net.ion.bleujin.ProxyObj;
+import net.ion.bleujin.AdProxyObj.Type;
 
 public class TestProxy extends TestCase {
 
@@ -17,7 +17,7 @@ public class TestProxy extends TestCase {
 		
 		
 		
-		People people = (People)Proxy.newProxyInstance(this.getClass().getClassLoader(), instance.getClass().getInterfaces(), new ProxyPeople(instance));
+		People people = (People)Proxy.newProxyInstance(this.getClass().getClassLoader(), instance.getClass().getInterfaces(), new ProxyObj(instance));
 		
 //		people.name() ;
 //		people.age() ;
@@ -29,8 +29,8 @@ public class TestProxy extends TestCase {
 	public void testAdvanceProxy() throws Exception {
 		Employee instance = Employee.create("bleujin", 20) ;
 		
-		People people = (People)Proxy.newProxyInstance(this.getClass().getClassLoader(), instance.getClass().getInterfaces(), new AdProxyPeople<Void>(instance, 
-				new AdProxyPeople.AOPHandler<Void>() {
+		People people = (People)Proxy.newProxyInstance(this.getClass().getClassLoader(), instance.getClass().getInterfaces(), new AdProxyObj<Void>(instance, 
+				new AdProxyObj.AOPHandler<Void>() {
 					@Override
 					public Void pre(Object proxy, Method m, Object[] args) {
 						System.out.println(m.getName() + " invocated") ;
