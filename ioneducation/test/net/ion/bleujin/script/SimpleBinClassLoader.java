@@ -1,26 +1,24 @@
-package net.ion.bleujin;
+package net.ion.bleujin.script;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOError;
-import java.io.IOException;
 import java.security.AccessControlContext;
 import java.security.AccessController;
 import java.security.PrivilegedExceptionAction;
 
 import net.ion.framework.util.IOUtil;
 
-public class CustomClassLoader extends ClassLoader {
+public class SimpleBinClassLoader extends ClassLoader {
 
-	String repoLocation = "./bin/";
-
-	public CustomClassLoader() {
-	}
-
-	public CustomClassLoader(ClassLoader parent) {
+	private final String clzLocation ;
+	public SimpleBinClassLoader(ClassLoader parent, String clzLocation) {
 		super(parent);
+		this.clzLocation = clzLocation ;
 	}
-	
+
+	public static SimpleBinClassLoader create(String clzLocation) {
+		return new SimpleBinClassLoader(SimpleBinClassLoader.class.getClassLoader(), clzLocation);
+	}
+
 
 	@Override
 	protected Class<?> findClass(final String name) throws ClassNotFoundException {
@@ -30,15 +28,16 @@ public class CustomClassLoader extends ClassLoader {
 			return (Class) AccessController.doPrivileged(new PrivilegedExceptionAction() {
 				public Object run() throws ClassNotFoundException {
 
+					FileInputStream fi = null;
 					try {
-
 						String path = name.replace('.', '/');
-						FileInputStream fi = new FileInputStream(repoLocation + path + ".class");
+						fi = new FileInputStream(clzLocation + path + ".class");
 						byte[] classBytes = IOUtil.toByteArray(fi) ;
-						IOUtil.close(fi) ;
 						return defineClass(name, classBytes, 0, classBytes.length);
 					} catch (Exception e) {
 						throw new ClassNotFoundException(name);
+					} finally {
+						IOUtil.close(fi);
 					}
 				}
 			}, acc);
@@ -46,6 +45,5 @@ public class CustomClassLoader extends ClassLoader {
 			return super.findClass(name);
 		}
 	}
+
 }
-
-

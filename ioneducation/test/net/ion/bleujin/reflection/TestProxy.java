@@ -1,50 +1,50 @@
 package net.ion.bleujin.reflection;
 
-import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 import junit.framework.TestCase;
 import net.ion.bleujin.AdProxyObj;
 import net.ion.bleujin.ProxyObj;
-import net.ion.bleujin.AdProxyObj.Type;
+import net.ion.framework.util.Debug;
 
 public class TestProxy extends TestCase {
 
 	public void testCreateProxy() throws Exception {
-		Employee instance = Employee.create("bleujin", 20) ;
+		People ori = Employee.create("bleujin", 20) ;
 //		instance.sayHello() ;
 		
-		
-		
-		People people = (People)Proxy.newProxyInstance(this.getClass().getClassLoader(), instance.getClass().getInterfaces(), new ProxyObj(instance));
+		People proxy = (People)Proxy.newProxyInstance(this.getClass().getClassLoader(), ori.getClass().getInterfaces(), new ProxyObj(ori));
 		
 //		people.name() ;
 //		people.age() ;
 //		
-		people.sayHello() ;
+		proxy.sayHello() ;
 	}
 	
 	
 	public void testAdvanceProxy() throws Exception {
-		Employee instance = Employee.create("bleujin", 20) ;
+		People ori = Employee.create("bleujin", 20) ;
 		
-		People people = (People)Proxy.newProxyInstance(this.getClass().getClassLoader(), instance.getClass().getInterfaces(), new AdProxyObj<Void>(instance, 
-				new AdProxyObj.AOPHandler<Void>() {
-					@Override
-					public Void pre(Object proxy, Method m, Object[] args) {
+		People proxy = (People)Proxy.newProxyInstance(this.getClass().getClassLoader(), ori.getClass().getInterfaces(), new AdProxyObj<Object>(ori, 
+				new AdProxyObj.AOPHandler<Object>() {
+			
+					public void pre(Object proxy, Method m, Object[] args) {
 						System.out.println(m.getName() + " invocated") ;
-						return null ;
 					}
-					public Void after(Object proxy, Method m, Object[] args, Object result) {
-						System.out.println(m.getName() + " executed and result = " + result) ;
-						return null;
+					public void after(Object proxy, Method m, Object[] args, Object result) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+						System.out.println(m.getName() + " executed and result = " + m.invoke(ori, args)) ;
 					}
+					public Object replace(Object proxy, Method m, Object[] args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+//						return m.invoke(ori, args) ;
+						return "Hello" ;
+					}
+					
 		}));
 		
-		people.name() ;
-		people.age() ;
-		people.sayHello() ;
+		String rtn = proxy.name() ;
+		Debug.line(rtn) ;
 	}
 	
 	

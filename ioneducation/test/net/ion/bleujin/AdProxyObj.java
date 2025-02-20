@@ -1,13 +1,15 @@
 package net.ion.bleujin;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class AdProxyObj<T> implements InvocationHandler {
 
 	public interface AOPHandler<T> {
-		public T pre(Object proxy, Method m, Object[] args) ;
-		public T after(Object proxy, Method m, Object[] args, Object result) ;
+		public void pre(Object proxy, Method m, Object[] args) throws Exception ;
+		public void after(Object proxy, Method m, Object[] args, Object result) throws Exception ;
+		public T replace(Object target, Method m, Object[] args) throws Exception ;
 	}
 	
 	public enum Type {
@@ -24,7 +26,7 @@ public class AdProxyObj<T> implements InvocationHandler {
 
 	public Object invoke(Object proxy, Method m, Object[] args) throws Throwable {
 		handler.pre(proxy, m, args) ;
-		final Object result = m.invoke(target, args);
+		final Object result =  handler.replace( target, m, args);
 		handler.after(proxy, m, args, result) ;
 		return result;
 	}

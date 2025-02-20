@@ -13,7 +13,8 @@ import junit.framework.TestCase;
 public class TestReflection extends TestCase {
 
 	public void testConstructor() throws Exception {
-		Constructor<Employee> cons = Employee.class.getDeclaredConstructor(String.class, int.class);
+		Class clz = Class.forName("net.ion.bleujin.reflection.Employee") ;
+		Constructor<Employee> cons = clz.getDeclaredConstructor(String.class, int.class);
 		cons.setAccessible(true) ;
 		Employee bleujin = cons.newInstance("bleujin", 20) ;
 		
@@ -30,8 +31,6 @@ public class TestReflection extends TestCase {
 
 		Method m = clz.getMethod("name", String.class);
 		Object result = m.invoke(instance, "hero");
-		
-		
 		
 		assertEquals(true, instance == result) ;
 		assertEquals("hero", instance.name()) ;
@@ -50,7 +49,6 @@ public class TestReflection extends TestCase {
 		cons.setAccessible(true) ;
 		Employee instance = cons.newInstance("bleujin", 20) ;
 		
-		
 		Field field = clz.getDeclaredField("name");
 		
 		assertEquals(String.class, field.getType()) ;
@@ -61,7 +59,8 @@ public class TestReflection extends TestCase {
 		field.set(instance, "hero") ;
 		assertEquals("hero", instance.name()) ;
 	}
-	
+
+
 	
 	public void testUseFramework() throws Exception {
 		final Class<Employee> clz = Employee.class;

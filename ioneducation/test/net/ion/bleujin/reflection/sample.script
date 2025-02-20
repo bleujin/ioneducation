@@ -1,0 +1,8 @@
+importPackage(net.ion.framework.parse.gson)
+
+new function(){
+
+	this.handle = function(name){
+		return new JsonObject().put("name", "bleujin") ;
+	}
+}
